@@ -1,0 +1,119 @@
+;
+; ╓───────────────────────────────────────────────────────╖
+; ║ 🔹 AutoHotkey _MsgBox Class                           ║
+; ║ 🔹 Create objects of information for AutoHotkey       ║
+; ║ 🔹 Message Boxes. This makes it easier to make        ║
+; ║ 🔹 changes on the fly, to organize separate messages, ║
+; ║ 🔹 make working with style easier, & makes working    ║
+; ║ 🔹 with interactive boxes easier.                     ║
+; ╙───────────────────────────────────────────────────────╜
+; ╓──────────────────────────────────────────────────────────╖
+; ║ 🔹 This method uses the DllCall 'MessageBox' rather than ║
+; ║ 🔹 the built-in MsgBox command. The only reason I chose  ║
+; ║ 🔹 to use this method is because it works well with my   ║
+; ║ 🔹 class and I am just not a fan of using the commands   ║
+; ║ 🔹 if I don't have to; which, is what I love about this  ║
+; ║ 🔹 language, the freedom to use whatever method I want.  ║
+; ╙──────────────────────────────────────────────────────────╜
+;
+; 🔹 You should have a decent understanding of using MsgBox's
+; 🔹 in AutoHotkey before you can understand the potential of
+; 🔹 this class. Not to say it's hard, but the point of this
+; 🔹 class is to make it easier to have better accesss to more
+; 🔹 advanced features of this function. 
+;
+; ╓──────────╖
+; ║ 🔹 Class ║
+; ╙──────────╜
+;
+class _MsgBox
+{
+	StyleObject :=	{   "MB_ABORTRETRYIGNORE":"0x00000002","MB_CANCELTRYCONTINUE":"0x00000006"
+                    ,   "MB_HELP":"0x00004000","MB_OK":"0x00000000"
+                    ,   "MB_OKCANCEL":"0x00000001","MB_RETRYCANCEL":"0x00000005"
+                    ,   "MB_YESNO":"0x00000004","MB_YESNOCANCEL":"0x00000003"
+                    ,   "MB_ICONEXCLAMATION":"0x00000030","MB_ICONWARNING":"0x00000030"
+                    ,   "MB_ICONINFORMATION":"0x00000040","MB_ICONASTERISK":"0x00000040"
+                    ,   "MB_ICONQUESTION":"0x00000020","MB_ICONSTOP":"0x00000010"
+                    ,   "MB_ICONERROR":"0x00000010","MB_ICONHAND":"0x00000010"
+                    ,   "MB_DEFBUTTON1":"0x00000000","MB_DEFBUTTON2":"0x00000100"
+                    ,   "MB_DEFBUTTON3":"0x00000200","MB_DEFBUTTON4":"0x00000300"
+                    ,   "MB_APPLMODAL":"0x00000000","MB_SYSTEMMODAL":"0x00001000"
+                    ,   "MB_TASKMODAL":"0x00002000","MB_DEFAULT_DESKTOP_ONLY":"0x00020000"
+                    ,   "MB_RIGHT":"0x00080000","MB_RTLREADING":"0x00100000"
+                    ,   "MB_SETFOREGROUND":"0x00010000","MB_TOPMOST":"0x00040000"
+                    ,   "MB_SERVICE_NOTIFICATION":"0x00200000"}
+    ReplyObject :=  {   1:"VB_OK"   ,2:"VB_CANCEL"
+                    ,   3:"VB_ABORT",4:"VB_RETRY"
+                    ,   5:"VB_IGNORE",6:"VB_Yes"
+                    ,   7:"VB_NO"}
+    __New(_title:="",_msg:="",_hwnd:=0,_styles:=""){
+        this.title:=(_title?_title:A_ScriptName)
+        this.message:=_msg
+        this.owner:=_hwnd
+        this.style:=this.Styles(    _styles.MaxIndex()
+                                ?   _styles
+                                :   ["MB_ICONINFORMATION","MB_OK"])
+    }
+    Styles(style:="",append:=False){
+        old_style:=this.style?this.style:0
+        if (style.MaxIndex())
+        {   for sty_idx, sty_item in style
+            {   if (this.IsKeyOrVal(sty_item,this.StyleObject))
+                {   if (append=False) {
+                        if (cleared<1) {
+                            cleared:=1
+                            this.style:=0
+                        }
+                    }
+                    if sty_item is xdigit
+                    {   stylex:=sty_item
+                    }
+                    else
+                    {   stylex:=this.StyleObject[sty_item]
+                    }
+                    this.style+=stylex
+                }
+                else
+                {   this.style:=old_style
+                    return this.style
+                }           
+            }
+        }
+        else
+        {   this.style:=this.StyleObject["MB_ICONINFORMATION"] + this.StyleObject["MB_OK"]
+        }
+        return this.style
+    }
+	Display(_title:="",_msg:="",_hwnd:="",_styles:=""){
+        lib_o:=DllCall("LoadLibrary","Str","User32.dll","Ptr")
+        free_lib:=Func("DllCall").Bind("FreeLibrary","Ptr",lib_o)
+		if (lib_o)
+        {   reply:=DllCall("MessageBox"	,"Uint",	_hwnd?_hwnd:this.owner
+										,"Str",		_msg?_msg:this.message
+										,"Str",		_title?_title:this.title
+										,"Uint",	_styles?_styles:this.style)
+            %free_lib%()
+            this.lastreply:=StrReplace(this.ReplyObject[reply],"VB_")
+			return this.lastreply
+		}
+        %free_lib%()
+	}
+    Debug(_func,_line,_msg:="",_file:="",_hwnd:="",_styles:=""){
+        msg :=  "Debug information for:"
+            .   "`nFile: " (_file?_file:A_ScriptName)
+            .   "`nLine: " _line
+            .   "`nFunction: " _func
+            .   (_msg?"`n`nMessage:`n" _msg:"")
+        return New _MsgBox( _func " Debug"
+                        ,   msg
+                        ,   (_hwnd?_hwnd:A_ScriptHwnd)
+                        ,   _styles.MaxIndex()?_styles:["MB_ICONINFORMATION","MB_OK"]).Display()
+    }
+    IsKeyOrVal(string,object){
+        if (IsObject(object))
+            for idx, item in object
+                if ((idx=string) Or (item=string))
+                    return True
+    }
+}
