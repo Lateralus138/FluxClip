@@ -72,7 +72,13 @@ Save | [Control]+s
 
 ### Compiled Executables <a name="Compiled"></a>
 
+- [FluxClip (X86)](https://github.com/Lateralus138/FluxClip/releases/download/1.5.29.20/FluxClip-x86.exe)
+- [FluxClip (X64)](https://github.com/Lateralus138/FluxClip/releases/download/1.5.29.20/FluxClip-x64.exe)
+
 ### Source Files <a name="Source"></a>
+- [Release Page - Official](https://lateralus138.github.io/FluxClip/)
+- [Release Page - Source Files](https://github.com/Lateralus138/FluxClip/releases)
+- [This Repository](https://github.com/Lateralus138/FluxClip)
 
 ## Media <a name="Media"></a>
 
