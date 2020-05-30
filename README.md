@@ -12,8 +12,9 @@ Screenshot utility for Windows.
 4. [Downloads](#Downloads)/Files
    1. [Compiled](#Compiled) Executables
    2. [Source](#Source) Files
-5. [Plans](#Plans)
-6. [License](#License)
+5. [Media](#Media)
+6. [Plans](#Plans)
+7. [License](#License)
 
 ## Motivation <a name="Motivation"></a>
 
@@ -72,6 +73,18 @@ Save | [Control]+s
 ### Compiled Executables <a name="Compiled"></a>
 
 ### Source Files <a name="Source"></a>
+
+## Media <a name="Media"></a>
+
+### Preview of selection
+
+![Preview](./resource/preview.png)
+
+### Video
+
+<a href="https://youtu.be/SU5jeWK9844" target="_blank">Preview - YouTube</a>
+
+<a href="https://lateralus138.github.io/Media/FluxClip2ndPreview/" target="_blank">Preview - My Site</a>
 
 ## Plans <a name="Plans"></a>
 
