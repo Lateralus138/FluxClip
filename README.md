@@ -82,9 +82,9 @@ Save | [Control]+s
 
 ### Video
 
-<a href="https://youtu.be/SU5jeWK9844" target="_blank">Preview - YouTube</a>
+[Preview - YouTube](https://youtu.be/SU5jeWK9844)
 
-<a href="https://lateralus138.github.io/Media/FluxClip2ndPreview/" target="_blank">Preview - My Site</a>
+[Preview - My Site](https://lateralus138.github.io/Media/FluxClip2ndPreview/)
 
 ## Plans <a name="Plans"></a>
 
